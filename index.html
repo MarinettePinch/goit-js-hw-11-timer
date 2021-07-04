@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Задание 11/3. Таймер обратного отсчёта.</title>
+    <style>
+      .timer {
+        display: flex;
+        justify-content: space-between;
+        background-color: #f2f1ff;
+        width: min-content;
+        margin: auto;
+        padding: 30px;
+        transform: translateY(30vh);
+        border-radius: 25px;
+      }
+      .field {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        color: rgb(194, 194, 194);
+        margin: 20px;
+        text-transform: uppercase;
+      }
+      .value {
+        background-color: #343148;
+        color: #f0ead6;
+        font-size: 72px;
+        font-weight: bold;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="timer" id="timer-1">
+      <div class="field">
+        <span class="value" data-value="days">11</span>
+        <span class="label">Days</span>
+      </div>
+
+      <div class="field">
+        <span class="value" data-value="hours">11</span>
+        <span class="label">Hours</span>
+      </div>
+
+      <div class="field">
+        <span class="value" data-value="mins">11</span>
+        <span class="label">Minutes</span>
+      </div>
+
+      <div class="field">
+        <span class="value" data-value="secs">11</span>
+        <span class="label">Seconds</span>
+      </div>
+    </div>
+
+    <script src="./timer.js"></script>
+  </body>
+</html>

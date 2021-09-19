@@ -16,7 +16,7 @@
   padding: 20px;
   border-radius: 25px;
   background-color: #f2f1ff;
-  width: 450px;
+  width: 460px;
   text-transform: uppercase;
 }
 
@@ -78,6 +78,10 @@
   margin-right: 10px;
 }
 
+.field:first-child .value {
+  width: 88px;
+}
+
 .value {
   background-color: #343148;
   color: #f0ead6;
@@ -86,4 +90,6 @@
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 10px;
+  width: 70px;
+  text-align: right;
 }

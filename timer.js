@@ -16,8 +16,8 @@
 
 
 const plagin = document.querySelector('.plagin');
-const timerFace = document.querySelector('.timerFace')
-
+const timerFace = document.querySelector('.timerFace');
+const errorFace = document.querySelector('.error');
 
 class CountdownTimer {
 
@@ -25,14 +25,11 @@ class CountdownTimer {
 
         this.selector = selector;
         this.targetDate = targetDate;
+        this.timer = document.getElementById(this.selector);
+        this.intervalId = null;
     }
     start() {
-        const timer = document.getElementById(this.selector);
-        if ((Date.now()) > this.targetDate) {
-            timer.innerHTML = `Выберите дату больше текущей!`;
-            return;
-        };
-        setInterval(() => {
+        this.intervalId = setInterval(() => {
 
             const currentTime = Date.now();
             
@@ -41,10 +38,15 @@ class CountdownTimer {
 
             const string = this.renderTimerFace(timeComponents);
 
-            timer.innerHTML = string;
+            this.timer.innerHTML = string + `<button class="startBtn sizeS" type="button" id="${this.selector+1}">x</button>`;
            
-        }, 1000);        
-        
+            const stopBtn = document.getElementById(`${this.selector+1}`);
+            stopBtn.addEventListener('click', () => {
+                this.stop();
+            });
+            
+        }, 1000);
+
     }
     getTimeComponents(time) {
         const days = Math.floor(time / (1000 * 60 * 60 * 24));
@@ -75,6 +77,10 @@ class CountdownTimer {
         <span class="label">Seconds</span>
     </li>`}
 
+    stop() {
+        clearInterval(this.intervalId);
+        this.timer.remove();
+    }
 }
 
 
@@ -82,7 +88,14 @@ const renderNewTimer = (event) => {
 
     if (event.target.id !== 'startBtn') return;
     const insertData = event.target.previousElementSibling.valueAsNumber;
+    
     if (!insertData) return;
+        
+    if ((Date.now()) > insertData) {
+        errorFace.textContent = `Выберите дату больше текущей!`;
+        return;
+    };
+    errorFace.textContent = '';
     
     const timerId = Math.random() * 10;
 

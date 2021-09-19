@@ -13,107 +13,94 @@
 
 // Плагин это класс CountdownTimer, экземпляр которого создает новый таймер с настройками.
 
-// new CountdownTimer({
-//     selector: '#timer-1',
-//     targetDate: new Date('Jul 17, 2021'),
-// });
-// Для подсчета значений используй следующие готовые формулы, где time - разница между targetDate и текущей датой.
-
-/*
- * Оставшиеся дни: делим значение UTC на 1000 * 60 * 60 * 24, количество
- * миллисекунд в одном дне (миллисекунды * секунды * минуты * часы)
- */
 
 
-// const days = Math.floor(time / (1000 * 60 * 60 * 24));
-
-/*
-* Оставшиеся часы: получаем остаток от предыдущего расчета с помощью оператора
- * остатка % и делим его на количество миллисекунд в одном часе
- * (1000 * 60 * 60 = миллисекунды * минуты * секунды)
-*/
-// const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-
-/*
-* Оставшиеся минуты: получаем оставшиеся минуты и делим их на количество
- * миллисекунд в одной минуте (1000 * 60 = миллисекунды * секунды)
-*/
-// const mins = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
-
-/*
- * Оставшиеся секунды: получаем оставшиеся секунды и делим их на количество
-* миллисекунд в одной секунде (1000)
-*/
-// const secs = Math.floor((time % (1000 * 60)) / 1000);
-
-// `    <div class="timer" id="timer-1">
-// <div class="field">
-// <span class="value" data-value="days">${days}</span>
-// <span class="label">Days</span>
-// </div>
-
-// <div class="field">
-// <span class="value" data-value="hours">${hours}</span>
-// <span class="label">Hours</span>
-// </div>
-
-// <div class="field">
-// <span class="value" data-value="mins">${mins}</span>
-// <span class="label">Minutes</span>
-// </div>
-
-// <div class="field">
-// <span class="value" data-value="secs">${secs}</span>
-// <span class="label">Seconds</span>
-// </div>
-// </div>`
-
-const refs = {
-    timer: document.querySelector('#timer-1'),
-    days: document.querySelector('[data-value="days"]'),
-    hours: document.querySelector('[data-value="hours"]'),
-    mins: document.querySelector('[data-value="mins"]'),
-    secs: document.querySelector('[data-value="secs"]')
-}
-
-console.log(refs.timer);
-console.log(refs.days.textContent);
-console.log(refs.hours.textContent);
-console.log(refs.mins.textContent);
-console.log(refs.secs.textContent);
-
-// сколько осталось полных дней до целевой даты?
-
-// сколько осталось полных часов до целевой даты?
-
-//  сколько осталось минут до целевой даты?
-
-// сколько осталось секунд до целевой даты?
+const plagin = document.querySelector('.plagin');
+const timerFace = document.querySelector('.timerFace')
 
 
-function getTimeComponents(time) {
-    const days = Math.floor(time / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const mins = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
-    const secs = Math.floor((time % (1000 * 60)) / 1000);
+class CountdownTimer {
 
-    return {days, hours, mins, secs}
-}
+    constructor({ selector, targetDate }) {
 
-const countdownTimer = {
-    targetDate: new Date('Jul 17, 2021'),
+        this.selector = selector;
+        this.targetDate = targetDate;
+    }
     start() {
+        const timer = document.getElementById(this.selector);
+        if ((Date.now()) > this.targetDate) {
+            timer.innerHTML = `Выберите дату больше текущей!`;
+            return;
+        };
         setInterval(() => {
+
             const currentTime = Date.now();
-            console.log(currentTime);
+            
             const deltaTime = this.targetDate - currentTime;
-            console.log(getTimeComponents(deltaTime));
-            return getTimeComponents(deltaTime);
-        }, 1000);
+            const timeComponents = this.getTimeComponents(deltaTime);
+
+            const string = this.renderTimerFace(timeComponents);
+
+            timer.innerHTML = string;
+           
+        }, 1000);        
         
-    },
+    }
+    getTimeComponents(time) {
+        const days = Math.floor(time / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const mins = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
+        const secs = Math.floor((time % (1000 * 60)) / 1000);
+
+        return { days, hours, mins, secs }
+    }
+    renderTimerFace({ days, hours, mins, secs }) {
+        return `<li class="field">
+        <span class="value" data-value="days">${days}</span>
+        <span class="label">Days</span>
+    </li>
+
+    <li class="field">
+        <span class="value" data-value="hours">${hours}</span>
+        <span class="label">Hours</span>
+    </li>
+
+    <li class="field">
+        <span class="value" data-value="mins">${mins}</span>
+        <span class="label">Minutes</span>
+    </li>
+
+    <li class="field">
+        <span class="value" data-value="secs">${secs}</span>
+        <span class="label">Seconds</span>
+    </li>`}
+
+}
+
+
+const renderNewTimer = (event) => {
+
+    if (event.target.id !== 'startBtn') return;
+    const insertData = event.target.previousElementSibling.valueAsNumber;
+    if (!insertData) return;
+    
+    const timerId = Math.random() * 10;
+
+    timerFace.insertAdjacentHTML('beforeend', `<ul class="timer" id="timer-${timerId}"></ul>`);
+
+
+    const timer1 = new CountdownTimer({
+        selector: `timer-${timerId}`,
+        targetDate: new Date(insertData),
+    });
+
+    timer1.start();
+
 }
 
 
 
-countdownTimer.start();
+plagin.addEventListener('click', renderNewTimer);
+
+
+
